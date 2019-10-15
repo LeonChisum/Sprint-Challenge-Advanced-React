@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import Axios from 'axios'
+import PlayerCard from './components/PlayerCard';
+import Selector from './components/Selector';
 
 export default class App extends Component {
   constructor() {
@@ -14,15 +17,24 @@ export default class App extends Component {
   }
 
   fetchPlayer = () => {
-   const res = fetch('http://localhost:5000/api/players')
-          
-   console.log(res)
+    Axios.get('http://localhost:5000/api/players')
+          .then(res => {
+            console.log(res.data)
+            this.setState({
+              players: res.data
+            })
+          })
   }
 
   render() {
     return (
       <div>
-        <h1>hello world</h1>
+        <Selector />
+        {this.state.players.map(player => (
+          <PlayerCard key={player.id}
+                      players={player} />
+        ))}
+         />
       </div>
     )
   }
