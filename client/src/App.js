@@ -7,7 +7,8 @@ export default class App extends Component {
   constructor() {
     super();
     this.state = {
-      players: []
+      players: [],
+      order: 1,
     }
 
   }
@@ -29,12 +30,12 @@ export default class App extends Component {
   render() {
     return (
       <div>
-        <Selector />
+        <Selector order={this.state.order} setOrder={(num) => this.setState({order: num})}/>
         {this.state.players.map(player => (
           <PlayerCard key={player.id}
-                      players={player} />
+                      players={player}
+                      order={this.state.order} />
         ))}
-         />
       </div>
     )
   }
