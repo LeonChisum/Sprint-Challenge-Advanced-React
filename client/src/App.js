@@ -1,26 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import Axios from 'axios'
+import PlayerCard from './components/PlayerCard';
+import Selector from './components/Selector';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      players: [],
+      order: 1,
+    }
+
+  }
+
+  componentDidMount() {
+    this.fetchPlayer();
+  }
+
+  fetchPlayer = () => {
+    Axios.get('http://localhost:5000/api/players')
+          .then(res => {
+            console.log(res.data)
+            this.setState({
+              players: res.data
+            })
+          })
+  }
+
+  render() {
+    return (
+      <div>
+        <Selector order={this.state.order} setOrder={(num) => this.setState({order: num})}/>
+        {this.state.players.map(player => (
+          <PlayerCard key={player.id}
+                      players={player}
+                      order={this.state.order} />
+        ))}
+      </div>
+    )
+  }
 }
-
-export default App;
